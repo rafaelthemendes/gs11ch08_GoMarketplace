@@ -36,7 +36,6 @@ const TestComponent: React.FC = () => {
       title: 'Test product',
       image_url: 'test',
       price: 1000,
-      quantity: 0,
     });
   }
 
@@ -93,8 +92,8 @@ describe('Cart Context', () => {
       fireEvent.press(getByTestId('add-to-cart'));
     });
 
-    expect(getByText('Test product')).toBeTruthy();
-    expect(getByText('1')).toBeTruthy();
+    wait(() => expect(getByText('Test product')).toBeTruthy());
+    wait(() => expect(getByText('1')).toBeTruthy());
   });
 
   it('should be able to increment quantity', async () => {
@@ -112,7 +111,7 @@ describe('Cart Context', () => {
       fireEvent.press(getByTestId('increment'));
     });
 
-    expect(getByText('2')).toBeTruthy();
+    wait(() => expect(getByText('2')).toBeTruthy());
   });
 
   it('should be able to decrement quantity', async () => {
@@ -134,7 +133,7 @@ describe('Cart Context', () => {
       fireEvent.press(getByTestId('decrement'));
     });
 
-    expect(getByText('1')).toBeTruthy();
+    wait(() => expect(getByText('1')).toBeTruthy());
   });
 
   it('should load products from AsyncStorage', async () => {
@@ -161,8 +160,6 @@ describe('Cart Context', () => {
     );
 
     await wait(() => expect(getByText('Test product')).toBeTruthy());
-
-    expect(getByText('Test product')).toBeTruthy();
   });
 
   it('should store products in AsyncStorage while adding, incrementing and decrementing', async () => {
