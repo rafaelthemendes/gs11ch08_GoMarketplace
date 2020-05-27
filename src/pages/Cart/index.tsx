@@ -1,31 +1,27 @@
 import React, { useMemo } from 'react';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-
 import { View } from 'react-native';
-
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import { useCart } from '../../hooks/cart';
+import formatValue from '../../utils/formatValue';
 import {
-  Container,
-  ProductContainer,
-  ProductList,
-  Product,
-  ProductImage,
-  ProductTitleContainer,
-  ProductTitle,
-  ProductPriceContainer,
-  ProductSinglePrice,
-  TotalContainer,
-  ProductPrice,
-  ProductQuantity,
-  ActionContainer,
   ActionButton,
+  ActionContainer,
+  Container,
+  Product,
+  ProductContainer,
+  ProductImage,
+  ProductList,
+  ProductPrice,
+  ProductPriceContainer,
+  ProductQuantity,
+  ProductSinglePrice,
+  ProductTitle,
+  ProductTitleContainer,
+  SubtotalValue,
+  TotalContainer,
   TotalProductsContainer,
   TotalProductsText,
-  SubtotalValue,
 } from './styles';
-
-import { useCart } from '../../hooks/cart';
-
-import formatValue from '../../utils/formatValue';
 
 interface Product {
   id: string;
@@ -39,23 +35,26 @@ const Cart: React.FC = () => {
   const { increment, decrement, products } = useCart();
 
   function handleIncrement(id: string): void {
-    // TODO
+    increment(id);
   }
 
   function handleDecrement(id: string): void {
-    // TODO
+    decrement(id);
   }
 
   const cartTotal = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
+    const totalPrice = products.reduce((accumulator, { price, quantity }) => {
+      return accumulator + price * quantity;
+    }, 0);
 
-    return formatValue(0);
+    return formatValue(totalPrice);
   }, [products]);
 
   const totalItensInCart = useMemo(() => {
-    // TODO RETURN THE SUM OF THE QUANTITY OF THE PRODUCTS IN THE CART
-
-    return 0;
+    const totalItens = products.reduce((accumulator, { quantity }) => {
+      return accumulator + quantity;
+    }, 0);
+    return totalItens;
   }, [products]);
 
   return (
@@ -69,7 +68,7 @@ const Cart: React.FC = () => {
             height: 80,
           }}
           renderItem={({ item }: { item: Product }) => (
-            <Product>
+            <Product key={item.id}>
               <ProductImage source={{ uri: item.image_url }} />
               <ProductTitleContainer>
                 <ProductTitle>{item.title}</ProductTitle>
